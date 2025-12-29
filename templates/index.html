@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuneHubMusic</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="app-name">TuneHubMusic</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="home">
+                    <span class="icon">⌂</span>
+                    <span>首页</span>
+                </a>
+                <a href="#" class="nav-item" data-page="library">
+                    <span class="icon">♫</span>
+                    <span>音乐库</span>
+                </a>
+                <a href="#" class="nav-item" data-page="playlist">
+                    <span class="icon">☰</span>
+                    <span>歌单</span>
+                </a>
+                <a href="#" class="nav-item" data-page="downloads">
+                    <span class="icon">↓</span>
+                    <span>下载管理</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item" data-page="settings">
+                    <span class="icon">⚙</span>
+                    <span>设置</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="content-header">
+                <div class="search-container">
+                    <div class="custom-select" id="source-select-wrapper" data-value="netease">
+                        <div class="custom-select-trigger">
+                            <span class="custom-select-value">网易云</span>
+                            <svg class="custom-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </div>
+                        <div class="custom-select-dropdown">
+                            <div class="custom-select-option selected" data-value="netease">网易云</div>
+                            <div class="custom-select-option" data-value="qq">QQ音乐</div>
+                            <div class="custom-select-option" data-value="kuwo">酷我</div>
+                        </div>
+                    </div>
+                    <div class="search-box">
+                        <span class="search-icon">⌕</span>
+                        <input type="text" id="search-input" placeholder="搜索音乐、歌手">
+                    </div>
+                    <button id="search-btn" class="search-btn">搜索</button>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <section class="section" id="search-results-section" style="display:none;">
+                    <div class="section-header">
+                        <h2 class="section-title">搜索结果</h2>
+                        <div class="batch-actions" id="search-batch-actions" style="display:none;">
+                            <label class="select-all-label">
+                                <input type="checkbox" id="search-select-all"> 全选
+                            </label>
+                            <span class="selected-count" id="search-selected-count">已选 0 首</span>
+                            <button class="batch-download-btn" id="search-batch-download">批量下载</button>
+                        </div>
+                    </div>
+                    <div class="song-list" id="search-results"></div>
+                </section>
+
+                <section class="section" id="home-section">
+                    <div class="section-header">
+                        <h2 class="section-title">排行榜</h2>
+                        <div class="batch-actions" id="toplist-batch-actions" style="display:none;">
+                            <label class="select-all-label">
+                                <input type="checkbox" id="toplist-select-all"> 全选
+                            </label>
+                            <span class="selected-count" id="toplist-selected-count">已选 0 首</span>
+                            <button class="batch-download-btn" id="toplist-batch-download">批量下载</button>
+                        </div>
+                    </div>
+                    <div class="toplist-tabs" id="toplist-tabs"></div>
+                    <div class="song-list" id="toplist-songs"></div>
+                </section>
+
+                <section class="section" id="settings-section" style="display:none;">
+                    <h2 class="section-title">设置</h2>
+                    <div class="settings-form">
+                        <div class="setting-item">
+                            <label>下载目录</label>
+                            <input type="text" id="download-dir" placeholder="./downloads">
+                        </div>
+                        <div class="setting-item">
+                            <label>音质选择</label>
+                            <div class="custom-select custom-select-block" id="quality-select-wrapper" data-value="320k">
+                                <div class="custom-select-trigger">
+                                    <span class="custom-select-value">高品质 (320k)</span>
+                                    <svg class="custom-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9l6 6 6-6"/>
+                                    </svg>
+                                </div>
+                                <div class="custom-select-dropdown">
+                                    <div class="custom-select-option" data-value="128k">标准 (128k)</div>
+                                    <div class="custom-select-option selected" data-value="320k">高品质 (320k)</div>
+                                    <div class="custom-select-option" data-value="flac">无损 (FLAC)</div>
+                                    <div class="custom-select-option" data-value="flac24bit">Hi-Res (24bit)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="save-settings" class="save-btn">保存设置</button>
+                    </div>
+                </section>
+
+                <section class="section" id="downloads-section" style="display:none;">
+                    <h2 class="section-title">下载管理</h2>
+                    <div class="download-list" id="download-list"></div>
+                </section>
+
+                <section class="section" id="library-section" style="display:none;">
+                    <div class="section-header">
+                        <h2 class="section-title">音乐库</h2>
+                        <button id="refresh-library-btn" class="refresh-btn">刷新</button>
+                    </div>
+                    <div class="song-list" id="library-list"></div>
+                </section>
+
+                <section class="section" id="playlist-section" style="display:none;">
+                    <div class="section-header">
+                        <h2 class="section-title">歌单</h2>
+                    </div>
+                    <div class="playlist-import-form">
+                        <div class="custom-select" id="playlist-source-wrapper" data-value="netease">
+                            <div class="custom-select-trigger">
+                                <span class="custom-select-value">网易云</span>
+                                <svg class="custom-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </div>
+                            <div class="custom-select-dropdown">
+                                <div class="custom-select-option selected" data-value="netease">网易云</div>
+                                <div class="custom-select-option" data-value="qq">QQ音乐</div>
+                                <div class="custom-select-option" data-value="kuwo">酷我</div>
+                            </div>
+                        </div>
+                        <input type="text" id="playlist-id-input" placeholder="输入歌单ID">
+                        <button id="import-playlist-btn" class="search-btn">导入歌单</button>
+                    </div>
+                    <div class="playlist-grid" id="playlist-grid"></div>
+                    <div class="playlist-detail" id="playlist-detail" style="display:none;">
+                        <div class="playlist-detail-header">
+                            <button id="back-to-playlists" class="back-btn">返回</button>
+                            <div class="playlist-detail-info">
+                                <h3 id="playlist-detail-name"></h3>
+                                <span id="playlist-detail-author"></span>
+                            </div>
+                            <div class="batch-actions" id="playlist-batch-actions">
+                                <label class="select-all-label">
+                                    <input type="checkbox" id="playlist-select-all"> 全选
+                                </label>
+                                <span class="selected-count" id="playlist-selected-count">已选 0 首</span>
+                                <button class="batch-download-btn" id="playlist-batch-download">批量下载</button>
+                            </div>
+                        </div>
+                        <div class="song-list" id="playlist-songs"></div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- 自定义确认弹窗 -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-title" id="confirm-title">确认</div>
+            <div class="modal-message" id="confirm-message">确定要执行此操作吗？</div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="confirm-cancel">取消</button>
+                <button class="modal-btn modal-btn-confirm" id="confirm-ok">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
